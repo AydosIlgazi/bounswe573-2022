@@ -3,7 +3,7 @@
 <table>
 <tr>
 <td>
-The repository and the readme file will be updated weekly according to the given project. 
+Django Web Application
 </td>
 </tr>
 </table>
