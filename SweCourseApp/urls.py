@@ -1,3 +1,4 @@
+from django.apps import apps
 from django.urls import path
 
 from . import views
