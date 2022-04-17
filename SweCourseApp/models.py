@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
 import datetime
 
 
@@ -22,3 +23,9 @@ class Choice(models.Model):
 
 class Test(models.Model):
     testId = models.CharField(max_length=100)
+
+
+class LearningSpace(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
