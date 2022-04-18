@@ -1,8 +1,12 @@
 from django.http import HttpResponse, HttpResponseRedirect
+
+
 from .models import Question,Choice
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
-
+from django.template import RequestContext
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login, authenticate
 
 def index(request):
     latest_question_list = Question.objects.order_by('-pub_date')[:5]
@@ -35,3 +39,18 @@ def vote(request, question_id):
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
         return HttpResponseRedirect(reverse('swecourseapp:results', args=(question.id,)))
+
+
+def signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return HttpResponseRedirect('/')
+    else:
+        form = UserCreationForm()
+    return render(request, 'SweCourseApp/signup.html', {'form': form})
