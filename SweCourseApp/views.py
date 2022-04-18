@@ -5,8 +5,9 @@ from .models import Question,Choice
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, authenticate
+
 
 def index(request):
     latest_question_list = Question.objects.order_by('-pub_date')[:5]
@@ -54,3 +55,19 @@ def signup(request):
     else:
         form = UserCreationForm()
     return render(request, 'SweCourseApp/signup.html', {'form': form})
+
+def loginView(request):
+    if request.method == "POST":
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return HttpResponseRedirect('/')
+    else:
+        form = AuthenticationForm()
+    return render(request, 'SweCourseApp/login.html', {'form': form})
+
+
