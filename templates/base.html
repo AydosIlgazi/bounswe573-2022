@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    {# Make modifiable head elements #}
+    <head>
+        <title>{% block title %}Home {% endblock title %} | CRM Easy</title>
+        {% block head_meta %}
+            {% block head_meta_charset %}
+                <meta http-equiv="Content-Type"
+                      content="text/html; charset=utf-8" />
+            {% endblock head_meta_charset %}
+            {% block head_meta_contentlanguage %}
+                <meta http-equiv="Content-Language" value="en-US" />
+            {% endblock head_meta_contentlanguage %}
+            {% block head_meta_viewport %}
+                <meta name="viewport"
+                      content="width=device-width, initial-scale=1.0">
+            {% endblock head_meta_viewport %}
+        {% endblock head_meta %}
+        {% block head_css %}
+            {% block head_css_site %}
+				<link href={% static "css/bootstrap.min.css" %} rel="stylesheet">
+            {% endblock head_css_site %}
+        {% endblock head_css %}
+    </head>
+	<body>
+		{# Header #}
+		<header>
+
+		</header>
+		{# The Document Body #}
+		<div id="site-wrapper">
+			{% block content %}
+				if you see this, something is wrong!
+			{% endblock content %}
+		</div>
+		{# The Footer #}
+		<footer>
+			
+		</footer>
+	</body>
+    {% block footer_javascript %}
+        {% block footer_javascript_site %}
+			<script src={% static "js/bootstrap.min.js" %} ></script>
+        {% endblock footer_javascript_site %}
+    {% endblock footer_javascript %}
+</html>
