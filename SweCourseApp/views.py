@@ -1,7 +1,8 @@
 from django.http import HttpResponse, HttpResponseRedirect
 
 
-from .models import Question,Choice
+from .models import LearningSpace, Question,Choice
+from. forms import LearningSpaceForm
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
@@ -70,4 +71,14 @@ def loginView(request):
         form = AuthenticationForm()
     return render(request, 'SweCourseApp/login.html', {'form': form})
 
+def create_learning_space(request):
+    if request.method == "POST":
+        form = LearningSpaceForm(request.POST)
+        if form.is_valid():
+            learning_space = form.save(commit=False)
+            learning_space.creator = request.user
+            learning_space.save()
+    
+    form = LearningSpaceForm()
+    return render(request, 'SweCourseApp/createlearningspace.html', {'form': form})
 

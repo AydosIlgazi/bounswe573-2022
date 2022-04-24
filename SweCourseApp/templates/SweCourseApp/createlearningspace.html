@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+	<div class="container-lg">
+		<form method="post" >
+		{% csrf_token %}
+		{{form.media}}
+		<div class="vh-100">
+			<h1 class="h3 fw-normal text-center">Create Learning Space</h3>
+				<div class="mb-4">
+					<label for="form-label"> {{ form.title.label_tag }}</label>
+					{% render_field form.title class="form-control" %}
+				</div>
+				<div class="mb-5 h-50">
+					<label for="form-label"> {{ form.description.label_tag }}</label>
+					{% render_field form.description class="form-control h-50" %}
+				</div>
+				<div class="mb-4">
+					<label for="form-label"> {{ form.short_description.label_tag }}</label>
+					{% render_field form.short_description class="form-control" %}
+				</div>
+				<div class="mb-4 ">
+					<label for="form-label"> {{ form.keywords.label_tag }}</label>
+					{% render_field form.keywords class="form-control" %}
+				</div>
+				<button class="w-100 btn btn-lg btn-primary" type="submit">Create</button>
+				{% if form.errors %}
+					<p class="text-danger">Your username and password didn't match. Please try again.</p>
+				{% endif %}
+		</div>
+		
+		</form>
+	</div>
+
+{% endblock %}
+

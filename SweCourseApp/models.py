@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 import datetime
+from tinymce import models as tinymce_models
 
 
 class Question(models.Model):
@@ -27,8 +28,9 @@ class Test(models.Model):
 
 class LearningSpace(models.Model):
     title = models.CharField(max_length=200)
-    description = models.TextField(blank=True)
+    description = tinymce_models.HTMLField()
     short_description = models.CharField(max_length=350, blank=True)
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
     keywords = models.CharField(max_length=300, blank=True)
+
 
