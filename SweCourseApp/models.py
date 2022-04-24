@@ -28,4 +28,7 @@ class Test(models.Model):
 class LearningSpace(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    short_description = models.CharField(max_length=350, blank=True)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE)
+    keywords = models.CharField(max_length=300, blank=True)
+
