@@ -22,4 +22,5 @@ urlpatterns = [
     path('signup/', views.signup, name='signups'),
     path('login/',views.loginView, name='login'),
     path('createlearningspace/',views.create_learning_space, name='createlearningspace'),
+    path('editlearningspace/<int:learning_space_id>', views.create_learning_space, name='editlearningspace')
 ]

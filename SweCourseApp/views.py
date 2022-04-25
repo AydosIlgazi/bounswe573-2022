@@ -71,14 +71,14 @@ def loginView(request):
         form = AuthenticationForm()
     return render(request, 'SweCourseApp/login.html', {'form': form})
 
-def create_learning_space(request):
-    if request.method == "POST":
-        form = LearningSpaceForm(request.POST)
-        if form.is_valid():
-            learning_space = form.save(commit=False)
-            learning_space.creator = request.user
-            learning_space.save()
+def create_learning_space(request, learning_space_id=None):
+    if learning_space_id:
+        learning_space = get_object_or_404(LearningSpace, pk=learning_space_id)
     else:
-        form = LearningSpaceForm()
+        learning_space = LearningSpace(creator = request.user)
+    form = LearningSpaceForm(request.POST or None, instance=learning_space)
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
     return render(request, 'SweCourseApp/createlearningspace.html', {'form': form})
 

@@ -8,7 +8,7 @@
 		{% csrf_token %}
 		{{form.media}}
 		<div class="vh-100">
-			<h1 class="h3 fw-normal text-center">Create Learning Space</h3>
+			<h1 class="h3 fw-normal text-center">Learning Space</h3>
 				<div class="mb-4">
 					<label for="form-label"> {{ form.title.label_tag }}</label>
 					{% render_field form.title class="form-control" %}
@@ -25,9 +25,17 @@
 					<label for="form-label"> {{ form.keywords.label_tag }}</label>
 					{% render_field form.keywords class="form-control" %}
 				</div>
-				<button class="w-100 btn btn-lg btn-primary" type="submit">Create</button>
+				<button class="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
 				{% if form.errors %}
-					<p class="text-danger">Your username and password didn't match. Please try again.</p>
+          
+					{% for field in form %}
+						{% for error in field.errors %}
+							<p class="text-danger">{{field.label}}: {{ error|escape }}</p>
+						{% endfor %}
+					{% endfor %}
+					{% for error in form.non_field_errors %}
+						<p class="text-danger">{{ error|escape }}</p>
+					{% endfor %}
 				{% endif %}
 		</div>
 		
