@@ -11,8 +11,8 @@ from django.contrib.auth import login, authenticate
 
 
 def index(request):
-    latest_question_list = Question.objects.order_by('-pub_date')[:5]
-    context = {'latest_question_list': latest_question_list}
+    learning_space_list =  LearningSpace.objects.all()[:5]          
+    context = {'learning_space_list': learning_space_list}
     return render(request, 'SweCourseApp/index.html', context)
 
 def detail(request, question_id):
@@ -78,7 +78,7 @@ def create_learning_space(request):
             learning_space = form.save(commit=False)
             learning_space.creator = request.user
             learning_space.save()
-    
-    form = LearningSpaceForm()
+    else:
+        form = LearningSpaceForm()
     return render(request, 'SweCourseApp/createlearningspace.html', {'form': form})
 

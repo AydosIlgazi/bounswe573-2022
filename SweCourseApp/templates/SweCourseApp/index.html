@@ -1,9 +1,20 @@
-{% if latest_question_list %}
-    <ul>
-    {% for question in latest_question_list %}
-        <li><a href="{% url 'swecourseapp:detail' question.id %}">{{ question.question_text }}</a></li>
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+<link href={% static "css/index.css" %} rel="stylesheet">
+
+<main class="container">
+    {% for ls in learning_space_list %}
+    <a href="{% url 'swecourseapp:detail' ls.id %}">
+        <div class="row learning-space-item mt-4" >
+            <div class="col">
+                <h5>{{ls.title}}</h5>
+                <p>{{ls.short_description}}</p>
+            </div>
+        </div>
+    </a>
     {% endfor %}
-    </ul>
-{% else %}
-    <p>No polls are available.</p>
-{% endif %}
+</div>
+{% endblock %}
