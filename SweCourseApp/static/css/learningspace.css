@@ -1,0 +1,68 @@
+
+.sidebar {
+	height: 82%;
+}
+  img{
+	
+	width: 90%;
+	
+  }
+.contatiner-vh {
+	height: 85vh;
+}
+
+.hover01 div img {
+	-webkit-transform: scale(1);
+	transform: scale(1);
+	-webkit-transition: .3s ease-in-out;
+	transition: .3s ease-in-out;
+}
+.hover01 div:hover img {
+	-webkit-transform: scale(1.2);
+	transform: scale(1.2);
+}
+
+.img-container p{
+    visibility:hidden;
+    opacity:0;
+    transition:visibility 0.3s linear,opacity 0.3s linear;
+}
+
+.img-container:hover p{
+    visibility: visible;
+	opacity:1;
+	font-size: small;
+	background-image: linear-gradient(90deg, red, blue);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.img-container{
+    text-align: center;
+}
+
+
+
+@media only screen and (min-width: 800px) {
+	/* For desktop: */
+	img{
+		width: 60%;
+	  }
+
+  }
+  @media only screen and (min-width: 1300px) {
+	/* For desktop: */
+	img{
+		width: 45%;
+	  }
+
+  }
+
+  @media only screen and (min-width: 1500px) {
+	/* For desktop: */
+	img{
+		width: 30%;
+	  }
+
+  }

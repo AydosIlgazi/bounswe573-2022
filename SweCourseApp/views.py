@@ -82,3 +82,8 @@ def create_learning_space(request, learning_space_id=None):
             form.save()
     return render(request, 'SweCourseApp/createlearningspace.html', {'form': form})
 
+def learning_space(request, learning_space_id):
+    learning_space = get_object_or_404(LearningSpace, pk=learning_space_id)
+    context = {'learning_space': learning_space}
+    return render(request, 'SweCourseApp/learningspace.html', context)
+

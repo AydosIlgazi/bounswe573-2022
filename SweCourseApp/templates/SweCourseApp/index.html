@@ -7,7 +7,7 @@
 
 <main class="container">
     {% for ls in learning_space_list %}
-    <a href="{% url 'swecourseapp:detail' ls.id %}">
+    <a href="{% url 'swecourseapp:learningspace' ls.id %}">
         <div class="row learning-space-item mt-4" >
             <div class="col">
                 <h5>{{ls.title}}</h5>
