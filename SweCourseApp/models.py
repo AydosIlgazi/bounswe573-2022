@@ -5,6 +5,7 @@ import datetime
 from tinymce import models as tinymce_models
 
 
+
 class Question(models.Model):
     question_text = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published')
@@ -34,3 +35,8 @@ class LearningSpace(models.Model):
     keywords = models.CharField(max_length=300, blank=True)
 
 
+class Topic(models.Model):
+    title = models.CharField(max_length=200)
+    content = tinymce_models.HTMLField()
+    duration = models.DateField()
+    learning_space = models.ForeignKey(LearningSpace, on_delete=models.CASCADE)
