@@ -24,4 +24,6 @@ urlpatterns = [
     path('createlearningspace/',views.create_learning_space, name='createlearningspace'),
     path('editlearningspace/<int:learning_space_id>', views.create_learning_space, name='editlearningspace'),
     path('learningspace/<int:learning_space_id>',views.learning_space, name='learningspace'),
+    path('learningspace/<int:learning_space_id>/createtopic',views.create_topic, name='createtopic' ),
+    path('learningspace/<int:learning_space_id>/edittopic/<int:topic_id>',views.create_topic, name='edittopic' ),
 ]
