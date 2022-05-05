@@ -1,3 +1,4 @@
+from operator import mod
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
@@ -38,5 +39,9 @@ class LearningSpace(models.Model):
 class Topic(models.Model):
     title = models.CharField(max_length=200)
     content = tinymce_models.HTMLField()
-    duration = models.DateField()
+    estimated_time = models.IntegerField(blank=True, null=True, verbose_name="Estimated Completion Time(hours)")
     learning_space = models.ForeignKey(LearningSpace, on_delete=models.CASCADE)
+
+class Prerequisite(models.Model):
+    main_topic = models.ForeignKey(Topic, related_name="main_topic", on_delete=models.CASCADE)
+    prerequisite_topic = models.ForeignKey(Topic, related_name="prerequisite_topic" ,on_delete=models.CASCADE)
