@@ -1,4 +1,5 @@
 from django.http import HttpResponse, HttpResponseRedirect
+from matplotlib.style import context
 from .models import LearningSpace, Topic, Prerequisite, Question,Choice
 from. forms import LearningSpaceForm, TopicForm
 from django.urls import reverse
@@ -157,7 +158,13 @@ def road_map(request, learning_space_id):
     return render(request, 'SweCourseApp/roadmap.html', context)
 
 def topics(request, learning_space_id):
+
     learning_space = LearningSpace.objects.get(pk=learning_space_id)
     topics =  Topic.objects.filter(learning_space_id = learning_space_id)        
     context = {'topic_list': topics, 'learning_space':learning_space}
     return render(request, 'SweCourseApp/topics.html', context)
+
+def topic(request, topic_id, learning_space_id=None ):
+    topic = Topic.objects.get(pk=topic_id)
+    context = {'topic':topic}
+    return render(request, 'SweCourseApp/topic.html', context)

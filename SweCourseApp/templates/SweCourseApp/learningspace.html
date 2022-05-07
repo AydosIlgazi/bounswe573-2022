@@ -19,29 +19,30 @@
 
 		</div>
 	  </div>
-	  
+	  <div class="col-1">
+		<a class="btn btn-warning" href="{% url 'swecourseapp:editlearningspace' learning_space.id %}">
+			<i class="fa fa-edit text-white">Edit</i></a>
+	  </div>
 	  <div class="col-2 d-flex flex-column justify-content-md-between align-items-center pt-2 hover01 sidebar ">
 		  <div class="p-2 img-container ">
-			<a href="#">
+			<a href="">
 			<img src={% static "images/home.png" %} />
 			<p class="mt-3">Home</p>
 			</a>
 		  </div>
 		  <div class="p-2 img-container ">
-			<a href="#">
+			<a href="{% url 'swecourseapp:topics' learning_space.id %}">
 			<img src={% static "images/elearning.png" %} />
 			<p class="mt-3">Topics </p>
 			</a>
 		  </div>
 		  <div class="p-2 img-container">
-			<a href="#">
+			<a href="{% url 'swecourseapp:roadmap' learning_space.id %}">
 			<img src={% static "images/road-map.png" %} />
 			<p class="mt-3">Road Map</p>
 			</a>
 		  </div>
 	  </div>
 	</div>
-  </div>
-
-	</div>
+</div>
 {% endblock %}
