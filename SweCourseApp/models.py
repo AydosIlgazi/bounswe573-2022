@@ -45,3 +45,11 @@ class Topic(models.Model):
 class Prerequisite(models.Model):
     main_topic = models.ForeignKey(Topic, related_name="main_topic", on_delete=models.CASCADE)
     prerequisite_topic = models.ForeignKey(Topic, related_name="prerequisite_topic" ,on_delete=models.CASCADE)
+
+class Resource(models.Model):
+    content = tinymce_models.HTMLField()
+    likes = models.IntegerField(default=0)
+    dislikes = models.IntegerField(default=0)
+    created_date = models.DateField()
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
