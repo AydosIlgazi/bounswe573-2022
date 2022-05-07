@@ -156,3 +156,8 @@ def road_map(request, learning_space_id):
     context = {'road_map': image_bytes,'learning_space':learning_space}
     return render(request, 'SweCourseApp/roadmap.html', context)
 
+def topics(request, learning_space_id):
+    learning_space = LearningSpace.objects.get(pk=learning_space_id)
+    topics =  Topic.objects.filter(learning_space_id = learning_space_id)        
+    context = {'topic_list': topics, 'learning_space':learning_space}
+    return render(request, 'SweCourseApp/topics.html', context)
