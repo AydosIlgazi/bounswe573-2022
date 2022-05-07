@@ -53,3 +53,8 @@ class Resource(models.Model):
     created_date = models.DateField()
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+class Comment(models.Model):
+    content= models.CharField(max_length=350)
+    resource = models.ForeignKey(Resource, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
