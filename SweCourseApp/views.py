@@ -1,6 +1,4 @@
 from django.http import HttpResponse, HttpResponseRedirect
-
-
 from .models import LearningSpace, Topic, Prerequisite, Question,Choice
 from. forms import LearningSpaceForm, TopicForm
 from django.urls import reverse
@@ -8,7 +6,13 @@ from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, authenticate
+import matplotlib
+import matplotlib.pyplot as plt
+import networkx as nx
+import io
 import sys
+
+matplotlib.use('Agg')
 
 def index(request):
     learning_space_list =  LearningSpace.objects.all()[:5]          
@@ -122,4 +126,33 @@ def create_topic(request, learning_space_id,topic_id=None):
                 Prerequisite.objects.create(main_topic=new_topic,prerequisite_topic=pre_topic)
             return HttpResponseRedirect('/')
     return render(request, 'SweCourseApp/createtopic.html', {'form': form, 'prerequisiteform':prerequisiteform})
+
+def road_map(request, learning_space_id):
+    learning_space = LearningSpace.objects.get(pk=learning_space_id)
+    G = nx.DiGraph()
+    topics = Topic.objects.filter(learning_space_id=learning_space_id)
+    for topic in topics:
+        G.add_node(topic.title)
+        prerequisites= Prerequisite.objects.filter(main_topic=topic.id)
+        for pre in prerequisites:
+            G.add_edge(topic.title, pre.prerequisite_topic.title)
+    # rectanle width 1.5
+
+    colors = [i/len(G.nodes) for i in range(len(G.nodes))]
+    pos = nx.shell_layout(G)
+
+    plt.figure(1,figsize=(10,8)) 
+    nx.draw_networkx(G, pos=pos,  with_labels=True,font_size=10,font_weight='bold',font_color='lightblue',  node_shape="s",node_color='none',edge_color='blue', bbox=dict(facecolor='none', edgecolor='blue', boxstyle='round,pad=1'))
+    axis = plt.gca()
+    axis.set_xlim([2*x for x in axis.get_xlim()])
+    axis.set_ylim([2*y for y in axis.get_ylim()])
+    buf = io.BytesIO()
+    plt.box(False)
+    plt.savefig(buf, format='svg',bbox_inches='tight',)
+    image_bytes = buf.getvalue().decode('utf-8')
+    buf.close()
+    plt.close()
+
+    context = {'road_map': image_bytes,'learning_space':learning_space}
+    return render(request, 'SweCourseApp/roadmap.html', context)
 
