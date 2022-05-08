@@ -1,6 +1,6 @@
 
 	tinymce.init({
-		  selector: "textarea",
+		  selector: "textarea#rich",
 		  height: "100%",      
 		  plugins: "insertdatetime media image preview",
 		  toolbar: "undo redo |  bold italic | alignleft alignright aligncenter alignjustify | image media | preview",
