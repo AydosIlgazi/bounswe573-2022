@@ -1,12 +1,15 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from matplotlib.style import context
-from .models import LearningSpace, Topic, Prerequisite, Question,Choice
-from. forms import LearningSpaceForm, TopicForm
+from .models import LearningSpace, Topic, Prerequisite, Question,Choice, Resource
+from. forms import LearningSpaceForm, TopicForm, ResourceForm
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, authenticate
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.core import serializers
 import matplotlib
 import matplotlib.pyplot as plt
 import networkx as nx
@@ -76,6 +79,7 @@ def loginView(request):
         form = AuthenticationForm()
     return render(request, 'SweCourseApp/login.html', {'form': form})
 
+@login_required
 def create_learning_space(request, learning_space_id=None):
     if learning_space_id:
         learning_space = get_object_or_404(LearningSpace, pk=learning_space_id)
@@ -84,7 +88,8 @@ def create_learning_space(request, learning_space_id=None):
     form = LearningSpaceForm(request.POST or None, instance=learning_space)
     if request.method == "POST":
         if form.is_valid():
-            form.save()
+            new_learning_space = form.save()
+            return HttpResponseRedirect(reverse('swecourseapp:learningspace', args=(new_learning_space.id,)))
     return render(request, 'SweCourseApp/createlearningspace.html', {'form': form})
 
 def learning_space(request, learning_space_id):
@@ -92,6 +97,7 @@ def learning_space(request, learning_space_id):
     context = {'learning_space': learning_space}
     return render(request, 'SweCourseApp/learningspace.html', context)
 
+@login_required
 def create_topic(request, learning_space_id,topic_id=None):
 
     all_topics = Topic.objects.filter(learning_space_id=learning_space_id).exclude(pk = topic_id)
@@ -125,7 +131,7 @@ def create_topic(request, learning_space_id,topic_id=None):
             for pre in prerequisites:
                 pre_topic = Topic.objects.get(pk=pre)
                 Prerequisite.objects.create(main_topic=new_topic,prerequisite_topic=pre_topic)
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect(reverse('swecourseapp:topics', args=(learning_space_id,)))
     return render(request, 'SweCourseApp/createtopic.html', {'form': form, 'prerequisiteform':prerequisiteform})
 
 def road_map(request, learning_space_id):
@@ -133,10 +139,10 @@ def road_map(request, learning_space_id):
     G = nx.DiGraph()
     topics = Topic.objects.filter(learning_space_id=learning_space_id)
     for topic in topics:
-        G.add_node(topic.title)
+        G.add_node(topic)
         prerequisites= Prerequisite.objects.filter(main_topic=topic.id)
         for pre in prerequisites:
-            G.add_edge(topic.title, pre.prerequisite_topic.title)
+            G.add_edge(topic, pre.prerequisite_topic)
     # rectanle width 1.5
 
     colors = [i/len(G.nodes) for i in range(len(G.nodes))]
@@ -164,7 +170,30 @@ def topics(request, learning_space_id):
     context = {'topic_list': topics, 'learning_space':learning_space}
     return render(request, 'SweCourseApp/topics.html', context)
 
+@login_required
 def topic(request, topic_id, learning_space_id=None ):
     topic = Topic.objects.get(pk=topic_id)
-    context = {'topic':topic}
+    resource_form = ResourceForm()
+    context = {'topic':topic, 'resource_form':resource_form}
     return render(request, 'SweCourseApp/topic.html', context)
+
+def postResource(request):
+    # request should be ajax and method should be POST.
+    if  request.method == "POST":
+        # get the form data
+        topic_id =request.POST.get("id")
+        topic = Topic.objects.get(pk=topic_id)
+        instance = Resource(topic=topic, user =request.user)
+        form = ResourceForm(request.POST, instance=instance)
+        # save the data and after fetch the object in instance
+        if form.is_valid():
+            instance = form.save()
+
+            # send to client side.
+            return JsonResponse({"data": instance}, status=200)
+        else:
+            # some form errors occured.
+            return JsonResponse({"error": form.errors}, status=400)
+
+    # some error occured
+    return JsonResponse({"error": "Please try again later"}, status=400)

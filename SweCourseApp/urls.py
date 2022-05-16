@@ -19,7 +19,7 @@ urlpatterns = [
 
     #path('topic/', views.topic, name='topic'),
 
-    path('signup/', views.signup, name='signups'),
+    path('signup/', views.signup, name='signup'),
     path('login/',views.loginView, name='login'),
     path('createlearningspace/',views.create_learning_space, name='createlearningspace'),
     path('editlearningspace/<int:learning_space_id>', views.create_learning_space, name='editlearningspace'),
@@ -29,4 +29,6 @@ urlpatterns = [
     path('learningspace/<int:learning_space_id>/roadmap',views.road_map, name='roadmap'),
     path('learningspace/<int:learning_space_id>/topics',views.topics, name='topics'),
     path('learningspace/<int:learning_space_id>/topic/<int:topic_id>',views.topic, name='topic'),
+    path('ajax/postResource', views.postResource, name = 'postresource'),
+
 ]

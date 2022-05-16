@@ -5,16 +5,37 @@
 {% block content %}
 <link href={% static "css/index.css" %} rel="stylesheet">
 
-<main class="container">
+<div class="container">
     <div class="row ">
         <h2 class="text-primary">{{topic.title}}</h2>
     </div>
-    <div class="row ">
+    <div class="row">
         {% autoescape off %}
         {{topic.content}} 
         {% endautoescape %}
     </div>
+    
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-12 col-lg-11 col-xl-10">
+            <button class="w-100 btn btn-lg btn-primary" type="submit"  id="addResourceButton">Add Resource</button>
+        </div>
+    </div>
+    <div class="row justify-content-center mb-4" id="addResource">
+        <div class="col-md-12 col-lg-11 col-xl-10">
+        <form method="post" id="resource-form" >
+		{% csrf_token %}
+		{{resource_form.media}}
+		<div >
+				<div class="mb-4 h-350px">
+					<label for="form-label"> {{ resource_form.content.label_tag }}</label>
+					{% render_field resource_form.content class="form-control" id="rich" %}
+				</div>
+				<button class="w-100 btn btn-lg btn-primary" id="resoruce-submit" data-id="{{topic.id}}" type="submit">Submit</button>
+		</div>
+		</form>
+    </div>
 
+    </div>
     <div class="row d-flex justify-content-center">
         <div class="col-md-12 col-lg-11 col-xl-10">
           <div class="card">
@@ -72,4 +93,36 @@
         </div>
       </div>
 </div>
+<script src={% static "js/jquery.min.js" %} ></script>
+<script src={% static "js/topic.js" %} ></script>
+
+{% block javascript %}
+<script>
+    $("#resource-form").submit(function (e) {
+	// preventing from page reload and default actions
+	e.preventDefault();
+	// serialize the data for sending the form data.
+	var serializedData = $(this).serialize();
+  var id = $('#resoruce-submit').data("id");
+  console.log(id);
+	// make POST ajax call
+	$.ajax({
+		type: 'POST',
+		url: "{% url 'swecourseapp:postresource' %}",
+		data: {
+      'content': tinymce.activeEditor.getContent(),
+      'id': id,
+      'csrfmiddlewaretoken': '{{ csrf_token }}',},
+    dataType: 'json',
+		success: function (response) {
+			location.reload();
+		},
+		error: function (response) {
+			// alert the error if any error occured
+			alert(response["responseJSON"]["error"]);
+		}
+	})
+})
+  </script>
+{% endblock javascript %}
 {% endblock %}
