@@ -15,7 +15,7 @@
 		  <div class="row justify-content-center  flex-grow-1">
 			<div class="container">
 				{% for t in topic_list %}
-				<a href="{% url 'swecourseapp:learningspace' t.id %}">
+				<a href="{% url 'swecourseapp:topic' learning_space.id t.id %}">
 					<div class="row learning-space-item mt-4 h-15 align-items-center" >
 						<div class="col">
 							<h5>{{t.title}}</h5>
