@@ -30,5 +30,6 @@ urlpatterns = [
     path('learningspace/<int:learning_space_id>/topics',views.topics, name='topics'),
     path('learningspace/<int:learning_space_id>/topic/<int:topic_id>',views.topic, name='topic'),
     path('ajax/postResource', views.postResource, name = 'postresource'),
+    path('ajax/likeResource', views.likeResource, name = 'likeResource'),
 
 ]

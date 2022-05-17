@@ -60,7 +60,10 @@
               </p>
   
               <div class="small d-flex justify-content-start">
-                <a  class="d-flex align-items-center me-3 like">
+                <a  class="d-flex align-items-center me-3 like" value="{{resource.id}}">
+                  {% if resource.likes > 0 %}
+                  <p class="mb-0">{{resource.likes}}</p>
+                  {% endif %}
                   <i class="far fa-thumbs-up me-2"></i>
                   <p class="mb-0">Like</p>
                 </a>
@@ -116,11 +119,32 @@
 			location.reload();
 		},
 		error: function (response) {
-			// alert the error if any error occured
 			alert(response["responseJSON"]["error"]);
 		}
 	})
 })
+
+  function likeResource(resourceId, displayer){
+    $.ajax({
+		type: 'POST',
+		url: "{% url 'swecourseapp:likeResource' %}",
+		data: {
+      'id': resourceId,
+      'csrfmiddlewaretoken': '{{ csrf_token }}',},
+    dataType: 'json',
+		success: function (response) {
+      if(response.likes = 1){
+        displayer.parent().prepend("<p class=mb-0 >1</p>")
+      }
+      else{
+			  displayer.text(response.likes);
+      }
+		},
+		error: function (response) {
+			alert(response["responseJSON"]["error"]);
+		}
+	})
+  }
   </script>
 {% endblock javascript %}
 {% endblock %}

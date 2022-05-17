@@ -10,6 +10,7 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.core import serializers
+from django.db.models import F
 import matplotlib
 import matplotlib.pyplot as plt
 import networkx as nx
@@ -179,22 +180,23 @@ def topic(request, topic_id, learning_space_id=None ):
     return render(request, 'SweCourseApp/topic.html', context)
 
 def postResource(request):
-    # request should be ajax and method should be POST.
     if  request.method == "POST":
-        # get the form data
         topic_id =request.POST.get("id")
         topic = Topic.objects.get(pk=topic_id)
         instance = Resource(topic=topic, user =request.user)
         form = ResourceForm(request.POST, instance=instance)
-        # save the data and after fetch the object in instance
         if form.is_valid():
             instance = form.save()
-
-            # send to client side.
             return JsonResponse({"data": instance}, status=200)
         else:
-            # some form errors occured.
             return JsonResponse({"error": form.errors}, status=400)
-
-    # some error occured
     return JsonResponse({"error": "Please try again later"}, status=400)
+
+
+def likeResource(request):
+    if  request.method == "POST":
+        resource_id =request.POST.get("id")
+        Resource.objects.filter(pk=resource_id).update(likes=F('likes') + 1)
+        resource = Resource.objects.get(pk=resource_id)
+        return JsonResponse({"likes": resource.likes}, status =200)
+
