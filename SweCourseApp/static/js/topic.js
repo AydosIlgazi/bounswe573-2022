@@ -4,6 +4,9 @@
 	$( "#addResourceButton" ).click(function() {
 		$( "#addResource" ).toggle();
 	  });
+	  $('.comment').click(function() {
+		$(this).parent().parent().parent().children().eq(1).toggle();
+	  });    
   });
 
 

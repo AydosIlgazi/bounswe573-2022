@@ -173,8 +173,9 @@ def topics(request, learning_space_id):
 @login_required
 def topic(request, topic_id, learning_space_id=None ):
     topic = Topic.objects.get(pk=topic_id)
+    resources = Resource.objects.filter(topic_id = topic_id)
     resource_form = ResourceForm()
-    context = {'topic':topic, 'resource_form':resource_form}
+    context = {'topic':topic, 'resource_form':resource_form, 'resources':resources}
     return render(request, 'SweCourseApp/topic.html', context)
 
 def postResource(request):
