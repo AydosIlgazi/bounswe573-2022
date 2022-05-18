@@ -65,3 +65,9 @@ class Comment(models.Model):
     resource = models.ForeignKey(Resource, on_delete=models.CASCADE)
     created_date = models.DateField(default=now, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+class Notes(models.Model):
+    content= models.CharField(max_length=500)
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    is_visible = models.BooleanField(default=False)
