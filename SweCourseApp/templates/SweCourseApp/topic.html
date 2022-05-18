@@ -4,7 +4,7 @@
 
 {% block content %}
 <link href={% static "css/index.css" %} rel="stylesheet">
-
+<link href={% static "css/topic.css" %} rel="stylesheet">
 <div class="container">
     <div class="row ">
         <h2 class="text-primary">{{topic.title}}</h2>
@@ -89,10 +89,101 @@
                 <button type="button" class="btn btn-outline-primary btn-sm">Cancel</button>
               </div>
             </div>
+            {% for comment in data.comments %}
+            <div class="card-footer py-3 border-1" style="background-color: #f8f9fa;">
+              <div class="d-flex flex-start w-100">
+                <img class="rounded-circle shadow-1-strong me-3"
+                  src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(19).webp" alt="avatar" width="40"
+                  height="40" />
+                <div class="form-outline w-100">
+                  <label class="form-label" for="textAreaExample">{{comment.content}}</label>
+                </div>
+                <div class="form-outline w-15">
+                  <label class="form-label" for="textAreaExample">{{comment.created_date}}</label>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
           </div>
+          
           {% endfor %}
         </div>
       </div>
+</div>
+<div class="ontop container">
+  <div class="row">
+    <div class="col-md-4 col-sm-6 content-card">
+        <div class="card-big-shadow">
+            <div class="card card-just-text" data-background="color" data-color="blue" data-radius="none">
+                <div class="content">
+                    <h6 class="category">Best cards</h6>
+                    <h4 class="title"><a href="#">Blue Card</a></h4>
+                    <p class="description">What all of these have in common is that they're pulling information out of the app or the service and making it relevant to the moment. </p>
+                </div>
+            </div> <!-- end card -->
+        </div>
+    </div>
+    
+    <div class="col-md-4 col-sm-6 content-card">
+        <div class="card-big-shadow">
+            <div class="card card-just-text" data-background="color" data-color="green" data-radius="none">
+                <div class="content">
+                    <h6 class="category">Best cards</h6>
+                    <h4 class="title"><a href="#">Green Card</a></h4>
+                    <p class="description">What all of these have in common is that they're pulling information out of the app or the service and making it relevant to the moment. </p>
+                </div>
+            </div> <!-- end card -->
+        </div>
+    </div>
+    
+    <div class="col-md-4 col-sm-6 content-card">
+        <div class="card-big-shadow">
+            <div class="card card-just-text" data-background="color" data-color="yellow" data-radius="none">
+                <div class="content">
+                    <h6 class="category">Best cards</h6>
+                    <h4 class="title"><a href="#">Yellow Card</a></h4>
+                    <p class="description">What all of these have in common is that they're pulling information out of the app or the service and making it relevant to the moment. </p>
+                </div>
+            </div> <!-- end card -->
+        </div>
+    </div>
+    
+    <div class="col-md-4 col-sm-6 content-card">
+        <div class="card-big-shadow">
+            <div class="card card-just-text" data-background="color" data-color="brown" data-radius="none">
+                <div class="content">
+                    <h6 class="category">Best cards</h6>
+                    <h4 class="title"><a href="#">Brown Card</a></h4>
+                    <p class="description">What all of these have in common is that they're pulling information out of the app or the service and making it relevant to the moment. </p>
+                </div>
+            </div> <!-- end card -->
+        </div>
+    </div>
+    
+    <div class="col-md-4 col-sm-6 content-card">
+        <div class="card-big-shadow">
+            <div class="card card-just-text" data-background="color" data-color="purple" data-radius="none">
+                <div class="content">
+                    <h6 class="category">Best cards</h6>
+                    <h4 class="title"><a href="#">Purple Card</a></h4>
+                    <p class="description">What all of these have in common is that they're pulling information out of the app or the service and making it relevant to the moment. </p>
+                </div>
+            </div> <!-- end card -->
+        </div>
+    </div>
+    
+    <div class="col-md-4 col-sm-6 content-card">
+        <div class="card-big-shadow">
+            <div class="card card-just-text" data-background="color" data-color="orange" data-radius="none">
+                <div class="content">
+                    <h6 class="category">Best cards</h6>
+                    <h4 class="title"><a href="#">Orange Card</a></h4>
+                    <p class="description">What all of these have in common is that they're pulling information out of the app or the service and making it relevant to the moment. </p>
+                </div>
+            </div> <!-- end card -->
+        </div>
+    </div>
+</div>
 </div>
 <script src={% static "js/jquery.min.js" %} ></script>
 <script src={% static "js/topic.js" %} ></script>
