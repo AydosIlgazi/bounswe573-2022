@@ -10,7 +10,8 @@
 
 	  $('.like').click(function() {
 		likeResource($(this).attr('value'),$(this).children().eq(0) );
-	  });    
+	  });
+
   });
 
 

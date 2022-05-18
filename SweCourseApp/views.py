@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from matplotlib.style import context
-from .models import LearningSpace, Topic, Prerequisite, Question,Choice, Resource
-from. forms import LearningSpaceForm, TopicForm, ResourceForm
+from .models import LearningSpace, Topic, Prerequisite, Question,Choice, Resource, Comment
+from. forms import CommentForm, LearningSpaceForm, TopicForm, ResourceForm
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
@@ -174,9 +174,18 @@ def topics(request, learning_space_id):
 @login_required
 def topic(request, topic_id, learning_space_id=None ):
     topic = Topic.objects.get(pk=topic_id)
+    resourceData = []
     resources = Resource.objects.filter(topic_id = topic_id)
+    for res in resources.iterator():
+        comments = Comment.objects.filter(resource_id=res.id)
+        resourceData.append(
+            {
+                'resource':res,
+                'comments': comments
+            })
+
     resource_form = ResourceForm()
-    context = {'topic':topic, 'resource_form':resource_form, 'resources':resources}
+    context = {'topic':topic, 'resource_form':resource_form, 'resource_data':resourceData}
     return render(request, 'SweCourseApp/topic.html', context)
 
 def postResource(request):
@@ -184,19 +193,35 @@ def postResource(request):
         topic_id =request.POST.get("id")
         topic = Topic.objects.get(pk=topic_id)
         instance = Resource(topic=topic, user =request.user)
+        json_instance = serializers.serialize('json', [ instance ])
         form = ResourceForm(request.POST, instance=instance)
         if form.is_valid():
             instance = form.save()
-            return JsonResponse({"data": instance}, status=200)
+            return JsonResponse({"data": json_instance}, status=200)
         else:
             return JsonResponse({"error": form.errors}, status=400)
     return JsonResponse({"error": "Please try again later"}, status=400)
 
 
 def likeResource(request):
+
     if  request.method == "POST":
         resource_id =request.POST.get("id")
         Resource.objects.filter(pk=resource_id).update(likes=F('likes') + 1)
         resource = Resource.objects.get(pk=resource_id)
         return JsonResponse({"likes": resource.likes}, status =200)
 
+
+def postComment(request):
+    if  request.method == "POST":
+        resource_id =request.POST.get("id")
+        resource = Resource.objects.get(pk=resource_id)
+        instance = Comment(resource=resource, user =request.user)
+        json_instance = serializers.serialize('json', [ instance ])
+        form = CommentForm(request.POST, instance=instance)
+        if form.is_valid():
+            instance = form.save()
+            return JsonResponse({"data": json_instance}, status=200)
+        else:
+            return JsonResponse({"error": form.errors}, status=400)
+    return JsonResponse({"error": "Please try again later"}, status=400)
