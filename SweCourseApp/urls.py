@@ -32,4 +32,5 @@ urlpatterns = [
     path('ajax/postResource', views.postResource, name = 'postresource'),
     path('ajax/likeResource', views.likeResource, name = 'likeResource'),
     path('ajax/postComment', views.postComment, name = 'postcomment'),
+    path('ajax/postNote', views.postNote, name = 'postnote'),
 ]

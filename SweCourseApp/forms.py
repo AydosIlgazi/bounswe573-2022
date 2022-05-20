@@ -1,5 +1,5 @@
 from django import forms
-from .models import LearningSpace,Topic, Resource, Comment
+from .models import LearningSpace,Topic, Resource, Comment, Notes
 
 class LearningSpaceForm(forms.ModelForm):
     
@@ -22,3 +22,8 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         exclude = ['created_date','resource','user']
+
+class NoteForm(forms.ModelForm):
+    class Meta:
+        model = Notes
+        exclude = ['topic','user']

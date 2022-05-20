@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from matplotlib.style import context
-from .models import LearningSpace, Topic, Prerequisite, Question,Choice, Resource, Comment
-from. forms import CommentForm, LearningSpaceForm, TopicForm, ResourceForm
+from .models import LearningSpace, Topic, Prerequisite, Question,Choice, Resource, Comment, Notes
+from. forms import CommentForm, LearningSpaceForm, TopicForm, ResourceForm, NoteForm
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
@@ -176,16 +176,18 @@ def topic(request, topic_id, learning_space_id=None ):
     topic = Topic.objects.get(pk=topic_id)
     resourceData = []
     resources = Resource.objects.filter(topic_id = topic_id)
+    user_notes = Notes.objects.filter(topic_id = topic_id).filter(user_id = request.user.id)
+    other_notes = Notes.objects.filter(topic_id = topic_id).filter(is_visible = True).exclude(user_id = request.user.id)
     for res in resources.iterator():
         comments = Comment.objects.filter(resource_id=res.id)
         resourceData.append(
             {
                 'resource':res,
-                'comments': comments
+                'comments': comments,
             })
 
     resource_form = ResourceForm()
-    context = {'topic':topic, 'resource_form':resource_form, 'resource_data':resourceData}
+    context = {'topic':topic, 'resource_form':resource_form, 'resource_data':resourceData, 'user_notes' : user_notes, 'other_notes':other_notes}
     return render(request, 'SweCourseApp/topic.html', context)
 
 def postResource(request):
@@ -219,6 +221,20 @@ def postComment(request):
         instance = Comment(resource=resource, user =request.user)
         json_instance = serializers.serialize('json', [ instance ])
         form = CommentForm(request.POST, instance=instance)
+        if form.is_valid():
+            instance = form.save()
+            return JsonResponse({"data": json_instance}, status=200)
+        else:
+            return JsonResponse({"error": form.errors}, status=400)
+    return JsonResponse({"error": "Please try again later"}, status=400)
+
+def postNote(request):
+    if  request.method == "POST":
+        topic_id =request.POST.get("id")
+        topic = Topic.objects.get(pk=topic_id)
+        instance = Notes(topic=topic, user =request.user)
+        json_instance = serializers.serialize('json', [ instance ])
+        form = NoteForm(request.POST, instance=instance)
         if form.is_valid():
             instance = form.save()
             return JsonResponse({"data": json_instance}, status=200)

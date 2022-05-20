@@ -6,6 +6,8 @@
 <link href={% static "css/index.css" %} rel="stylesheet">
 <link href={% static "css/topic.css" %} rel="stylesheet">
 <div class="container">
+  <div class="row">
+    <div class="col-11">
     <div class="row ">
         <h2 class="text-primary">{{topic.title}}</h2>
     </div>
@@ -109,82 +111,95 @@
           {% endfor %}
         </div>
       </div>
+    </div>
+    <div class="col-1">
+      <button type="button" id="add-note" class="btn btn-warning mb-4">Add Note</button>
+      <button type="button" id="my-notes" class="btn btn-info mb-4">My Notes</button>
+      <button type="button" id="other-notes" class="btn btn-success">Other Notes</button>
+    </div>
+    </div>
 </div>
-<div class="ontop container">
+<div class="ontop container add-note" style="display :none">
+  <div class="row ">
+    <div class="col-3"></div>
+    <div class="col-6">
+
+      <div class="card text-white bg-secondary mb-3 text-center" style="min-height: 300px;">
+        <div class="card-header">Add Note</div>
+        <div class="card-body">
+          <textarea class="form-control" id="note-content" rows="4"
+          style="background: #fff;"></textarea>
+          <div class="mt-3">          <input class="form-check-input" type="checkbox" id="note-visible">
+            <label class="form-check-label" for="flexCheckDefault">
+              Is Visible To All
+            </label></div>
+
+          <div class="row mt-3">
+            <div class="col-6"><a id="note-close" class="btn btn-danger">Back</a></div>
+            <div class="col-6"><a  id="submit-note" data-id="{{topic.id}}" class="btn btn-primary">Submit</a></div>
+          </div>
+          
+        </div>
+    </div>
+  </div>
+    <div class="col-3"></div>
+
+</div>
+  
+</div>
+
+<div class="ontop container notes my-notes"  style="display :none">
   <div class="row">
+    <div class="col-11">
+      <div class="row">
+    {% for note in user_notes %}
     <div class="col-md-4 col-sm-6 content-card">
         <div class="card-big-shadow">
-            <div class="card card-just-text" data-background="color" data-color="blue" data-radius="none">
+            <div class="card note card-just-text">
                 <div class="content">
-                    <h6 class="category">Best cards</h6>
-                    <h4 class="title"><a href="#">Blue Card</a></h4>
-                    <p class="description">What all of these have in common is that they're pulling information out of the app or the service and making it relevant to the moment. </p>
+                    
+                    <p class="description">{{note.content}} </p>
                 </div>
             </div> <!-- end card -->
         </div>
     </div>
-    
-    <div class="col-md-4 col-sm-6 content-card">
-        <div class="card-big-shadow">
-            <div class="card card-just-text" data-background="color" data-color="green" data-radius="none">
-                <div class="content">
-                    <h6 class="category">Best cards</h6>
-                    <h4 class="title"><a href="#">Green Card</a></h4>
-                    <p class="description">What all of these have in common is that they're pulling information out of the app or the service and making it relevant to the moment. </p>
-                </div>
-            </div> <!-- end card -->
-        </div>
-    </div>
-    
-    <div class="col-md-4 col-sm-6 content-card">
-        <div class="card-big-shadow">
-            <div class="card card-just-text" data-background="color" data-color="yellow" data-radius="none">
-                <div class="content">
-                    <h6 class="category">Best cards</h6>
-                    <h4 class="title"><a href="#">Yellow Card</a></h4>
-                    <p class="description">What all of these have in common is that they're pulling information out of the app or the service and making it relevant to the moment. </p>
-                </div>
-            </div> <!-- end card -->
-        </div>
-    </div>
-    
-    <div class="col-md-4 col-sm-6 content-card">
-        <div class="card-big-shadow">
-            <div class="card card-just-text" data-background="color" data-color="brown" data-radius="none">
-                <div class="content">
-                    <h6 class="category">Best cards</h6>
-                    <h4 class="title"><a href="#">Brown Card</a></h4>
-                    <p class="description">What all of these have in common is that they're pulling information out of the app or the service and making it relevant to the moment. </p>
-                </div>
-            </div> <!-- end card -->
-        </div>
-    </div>
-    
-    <div class="col-md-4 col-sm-6 content-card">
-        <div class="card-big-shadow">
-            <div class="card card-just-text" data-background="color" data-color="purple" data-radius="none">
-                <div class="content">
-                    <h6 class="category">Best cards</h6>
-                    <h4 class="title"><a href="#">Purple Card</a></h4>
-                    <p class="description">What all of these have in common is that they're pulling information out of the app or the service and making it relevant to the moment. </p>
-                </div>
-            </div> <!-- end card -->
-        </div>
-    </div>
-    
-    <div class="col-md-4 col-sm-6 content-card">
-        <div class="card-big-shadow">
-            <div class="card card-just-text" data-background="color" data-color="orange" data-radius="none">
-                <div class="content">
-                    <h6 class="category">Best cards</h6>
-                    <h4 class="title"><a href="#">Orange Card</a></h4>
-                    <p class="description">What all of these have in common is that they're pulling information out of the app or the service and making it relevant to the moment. </p>
-                </div>
-            </div> <!-- end card -->
-        </div>
+    {% endfor %}
+  </div>
+  </div>
+
+    <div class="col-1">
+      <button type="button" id="close-mynotes" class="btn-close" aria-label="Close"></button>
     </div>
 </div>
 </div>
+
+<div class="ontop container notes other-notes"  style="display :none">
+  <div class="row">
+    <div class="col-11">
+      <div class="row">
+        {% for note in other_notes %}
+    <div class="col-md-4 col-sm-6 content-card">
+        <div class="card-big-shadow">
+            <div class="card note card-just-text">
+                <div class="content">
+                    
+                    <p class="description">{{note.content}} </p>
+                </div>
+            </div> <!-- end card -->
+        </div>
+    </div>
+    {% endfor %}
+  </div>
+  </div>
+
+    <div class="col-1">
+      <button type="button" id="close-othernotes" class="btn-close" aria-label="Close"></button>
+    </div>
+</div>
+</div>
+
+
+
 <script src={% static "js/jquery.min.js" %} ></script>
 <script src={% static "js/topic.js" %} ></script>
 
@@ -225,6 +240,31 @@ $('.post-comment').click(function(){
 				url: "{% url 'swecourseapp:postcomment' %}",
 				data: {
 			'content': $(this).parent().parent().find('.form-control').val(),
+			'id': id,
+			'csrfmiddlewaretoken': '{{ csrf_token }}',},
+			dataType: 'json',
+				success: function (response) {
+					location.reload();
+				},
+				error: function (response) {
+					alert(response["responseJSON"]["error"]);
+				}
+			})
+    });     
+
+    $('#submit-note').click(function(){
+		var id = $(this).data("id");
+		console.log($(this).closest('.card-body'));
+		console.log($(this).closest('.card-body').find('.note-content'));
+		console.log($(this).closest('.card-body').find('.note-content').val());
+
+			// make POST ajax call
+			$.ajax({
+				type: 'POST',
+				url: "{% url 'swecourseapp:postnote' %}",
+				data: {
+			'content': $(this).closest('.card-body').find('#note-content').val(),
+      'is_visible': $(this).closest('.card-body').find('#note-visible').val(),
 			'id': id,
 			'csrfmiddlewaretoken': '{{ csrf_token }}',},
 			dataType: 'json',
