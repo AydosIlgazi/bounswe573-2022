@@ -1,6 +1,7 @@
 a, a:visited, a:hover, a:active{
 	text-decoration: none !important;
 	color: inherit;
+	cursor: pointer;
   }
 
 .w-25 {
@@ -13,4 +14,7 @@ a, a:visited, a:hover, a:active{
 
 .h-350px {
 	height: 350px;
+}
+.w-15 {
+	width: 15%;
 }
