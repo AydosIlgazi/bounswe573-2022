@@ -1,3 +1,4 @@
+from ast import keyword
 from django.http import HttpResponse, HttpResponseRedirect
 from matplotlib.style import context
 from .models import LearningSpace, Topic, Prerequisite, Question,Choice, Resource, Comment, Notes
@@ -10,7 +11,7 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.core import serializers
-from django.db.models import F
+from django.db.models import F, Q
 import matplotlib
 import matplotlib.pyplot as plt
 import networkx as nx
@@ -20,7 +21,11 @@ import sys
 matplotlib.use('Agg')
 
 def index(request):
-    learning_space_list =  LearningSpace.objects.all()[:5]          
+    keywords =request.GET.get("searchKeywords")
+    if keywords is not None:
+        learning_space_list = LearningSpace.objects.filter(Q(title__icontains=keywords) | Q(description__icontains=keywords) | Q(keywords__icontains=keywords))
+    else:
+        learning_space_list =  LearningSpace.objects.all()[:5]          
     context = {'learning_space_list': learning_space_list}
     return render(request, 'SweCourseApp/index.html', context)
 

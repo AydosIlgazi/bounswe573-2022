@@ -1,3 +1,9 @@
+$(document).ready(function () {
+	$('#search').click(function(){
+	console.log('dsadsaadssad')
+	window.location.href= location.protocol + '//' + location.host +'/?searchKeywords=' + $('#search-input').val()
+  }); 
+});
 
 	tinymce.init({
 		  selector: "textarea#rich",
