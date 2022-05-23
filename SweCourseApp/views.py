@@ -195,6 +195,7 @@ def topic(request, topic_id, learning_space_id=None ):
     context = {'topic':topic, 'resource_form':resource_form, 'resource_data':resourceData, 'user_notes' : user_notes, 'other_notes':other_notes}
     return render(request, 'SweCourseApp/topic.html', context)
 
+@login_required
 def postResource(request):
     if  request.method == "POST":
         topic_id =request.POST.get("id")
@@ -209,7 +210,7 @@ def postResource(request):
             return JsonResponse({"error": form.errors}, status=400)
     return JsonResponse({"error": "Please try again later"}, status=400)
 
-
+@login_required
 def likeResource(request):
 
     if  request.method == "POST":
@@ -218,7 +219,7 @@ def likeResource(request):
         resource = Resource.objects.get(pk=resource_id)
         return JsonResponse({"likes": resource.likes}, status =200)
 
-
+@login_required
 def postComment(request):
     if  request.method == "POST":
         resource_id =request.POST.get("id")
@@ -233,6 +234,7 @@ def postComment(request):
             return JsonResponse({"error": form.errors}, status=400)
     return JsonResponse({"error": "Please try again later"}, status=400)
 
+@login_required
 def postNote(request):
     if  request.method == "POST":
         topic_id =request.POST.get("id")
