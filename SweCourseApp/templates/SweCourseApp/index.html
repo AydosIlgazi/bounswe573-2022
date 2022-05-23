@@ -6,15 +6,24 @@
 <link href={% static "css/index.css" %} rel="stylesheet">
 
 <main class="container">
-    {% for ls in learning_space_list %}
-    <a href="{% url 'swecourseapp:learningspace' ls.id %}">
-        <div class="row learning-space-item mt-4" >
-            <div class="col">
-                <h5>{{ls.title}}</h5>
-                <p>{{ls.short_description}}</p>
-            </div>
+    <div class="row mt-3">
+        <div class="col-11 mt-4">
+            {% for ls in learning_space_list %}
+            <a href="{% url 'swecourseapp:learningspace' ls.id %}">
+                <div class="row learning-space-item mt-4" >
+                    <div class="col">
+                        <h5>{{ls.title}}</h5>
+                        <p>{{ls.short_description}}</p>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
         </div>
-    </a>
-    {% endfor %}
+        <div class="col-1">
+            <a class="btn btn-success" href="{% url 'swecourseapp:createlearningspace' %}">
+                <i class="fa fa-plus text-white">Add</i></a>
+        </div>
+    </div>
+
 </div>
 {% endblock %}
