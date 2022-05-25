@@ -152,6 +152,14 @@ def topics(request, learning_space_id):
     return render(request, 'SweCourseApp/topics.html', context)
 
 @login_required
+def participants(request, learning_space_id):
+    learning_space = LearningSpace.objects.get(pk=learning_space_id)
+    participants =LearningSpaceParticipation.objects.filter(learning_space_id = learning_space_id)
+    context = {'participants': participants, 'learning_space':learning_space}
+    return render(request, 'SweCourseApp/participants.html', context)
+
+
+@login_required
 def topic(request, topic_id, learning_space_id=None ):
     topic = Topic.objects.get(pk=topic_id)
     is_participant= LearningSpaceParticipation.objects.filter(learning_space_id = learning_space_id,user=request.user).exists()
