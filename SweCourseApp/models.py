@@ -56,3 +56,6 @@ class LikedResources(models.Model):
     resource = models.ForeignKey(Resource, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     
+class LearningSpaceParticipation(models.Model):
+    learning_space = models.ForeignKey(LearningSpace, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
