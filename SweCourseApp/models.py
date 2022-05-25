@@ -51,3 +51,8 @@ class Notes(models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     is_visible = models.BooleanField(default=False)
+
+class LikedResources(models.Model):
+    resource = models.ForeignKey(Resource, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    

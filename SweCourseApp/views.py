@@ -1,7 +1,7 @@
 from ast import keyword
 from django.http import HttpResponse, HttpResponseRedirect
 from matplotlib.style import context
-from .models import LearningSpace, Topic, Prerequisite, Resource, Comment, Notes
+from .models import LearningSpace, Topic, Prerequisite, Resource, Comment, Notes, LikedResources
 from. forms import CommentForm, LearningSpaceForm, TopicForm, ResourceForm, NoteForm
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
@@ -188,9 +188,14 @@ def postResource(request):
 def likeResource(request):
 
     if  request.method == "POST":
+        
         resource_id =request.POST.get("id")
+        liked_resource= LikedResources.objects.filter(resource = resource_id,user=request.user).exists()
+        if liked_resource:
+            return JsonResponse({"error": "You have already liked this resource" + str(resource_id)}, status =500)
         Resource.objects.filter(pk=resource_id).update(likes=F('likes') + 1)
         resource = Resource.objects.get(pk=resource_id)
+        LikedResources.objects.create(resource = resource, user = request.user)
         return JsonResponse({"likes": resource.likes}, status =200)
 
 @login_required
