@@ -1,11 +1,10 @@
-
 from django.test import TestCase, Client,  RequestFactory
 from matplotlib.pyplot import title 
-from SweCourseApp.models import LearningSpace, Topic
+from SweCourseApp.models import LearningSpace, Topic, Resource
 from django.contrib.auth.models import User
 from django.urls import reverse
 
-from SweCourseApp.views import learning_space
+from SweCourseApp.views import learning_space, topic
 
 
 class SignUpViewTest(TestCase):
@@ -172,10 +171,75 @@ class CreateTopicTest(TestCase):
 	def test_view_topic_not_created_without_login(self):
 		url = '/learningspace/' + str(self.learning_space.id) + '/createtopic'
 		response =self.client.post(url, {'title':'test title', 'content':'test content'})
-		self.assertRedirects(response, '/login/?next=/learningspace/4/createtopic', fetch_redirect_response=False)
+		self.assertRedirects(response, '/login/?next=/learningspace/' +str(self.learning_space.id) +'/createtopic', fetch_redirect_response=False)
 	
 
+class PostResourceTest(TestCase):
+	@classmethod
+	def setUpTestData(self):
+		self.test_user = User.objects.create_user(username='testuser1', password='1X<ISRUkw+tuK')
+		self.learning_space= LearningSpace.objects.create(title='Test LearningSpace Title', description='Test Description', creator=self.test_user)
+		self.topic= Topic.objects.create(title='Test LearningSpace Title', content='Test Content', learning_space=self.learning_space)
+		self.client = Client()
+	
+	def test_resource_posted_successfully(self):
+		self.client.login(username= self.test_user.username, password = '1X<ISRUkw+tuK')
+		response =self.client.post(reverse('swecourseapp:postresource'), { 'content':'test content', 'id':self.topic.id})
+		self.assertEqual(response.status_code, 200)
 
+	def test_resource_not_posted_wrong_input(self):
+		self.client.login(username= self.test_user.username, password = '1X<ISRUkw+tuK')
+		response =self.client.post(reverse('swecourseapp:postresource'), {  'id':self.topic.id})
+		self.assertEqual(response.status_code, 400)
+
+	def test_resource_not_posted_without_login(self):
+		response =self.client.post(reverse('swecourseapp:postresource'), { 'content':'test content', 'id':self.topic.id})
+		self.assertRedirects(response, '/login/?next=/ajax/postResource', fetch_redirect_response=False)
+
+class PostCommentTest(TestCase):
+	@classmethod
+	def setUpTestData(self):
+		self.test_user = User.objects.create_user(username='testuser1', password='1X<ISRUkw+tuK')
+		self.learning_space= LearningSpace.objects.create(title='Test LearningSpace Title', description='Test Description', creator=self.test_user)
+		self.topic= Topic.objects.create(title='Test LearningSpace Title', content='Test Content', learning_space=self.learning_space)
+		self.resource = Resource.objects.create(content = 'Test Content', user=self.test_user, topic = self.topic)
+		self.client = Client()
+	
+	def test_resource_posted_successfully(self):
+		self.client.login(username= self.test_user.username, password = '1X<ISRUkw+tuK')
+		response =self.client.post(reverse('swecourseapp:postcomment'), { 'content':'test content', 'id':self.resource.id})
+		self.assertEqual(response.status_code, 200)
+
+	def test_resource_not_posted_wrong_input(self):
+		self.client.login(username= self.test_user.username, password = '1X<ISRUkw+tuK')
+		response =self.client.post(reverse('swecourseapp:postcomment'), {  'id':self.resource.id})
+		self.assertEqual(response.status_code, 400)
+
+	def test_resource_not_posted_without_login(self):
+		response =self.client.post(reverse('swecourseapp:postcomment'), { 'content':'test content', 'id':self.resource.id})
+		self.assertRedirects(response, '/login/?next=/ajax/postComment', fetch_redirect_response=False)
+
+class PostNoteTest(TestCase):
+	@classmethod
+	def setUpTestData(self):
+		self.test_user = User.objects.create_user(username='testuser1', password='1X<ISRUkw+tuK')
+		self.learning_space= LearningSpace.objects.create(title='Test LearningSpace Title', description='Test Description', creator=self.test_user)
+		self.topic= Topic.objects.create(title='Test LearningSpace Title', content='Test Content', learning_space=self.learning_space)
+		self.client = Client()
+	
+	def test_resource_posted_successfully(self):
+		self.client.login(username= self.test_user.username, password = '1X<ISRUkw+tuK')
+		response =self.client.post(reverse('swecourseapp:postnote'), { 'content':'test content', 'id':self.topic.id})
+		self.assertEqual(response.status_code, 200)
+
+	def test_resource_not_posted_wrong_input(self):
+		self.client.login(username= self.test_user.username, password = '1X<ISRUkw+tuK')
+		response =self.client.post(reverse('swecourseapp:postnote'), {  'id':self.topic.id})
+		self.assertEqual(response.status_code, 400)
+
+	def test_resource_not_posted_without_login(self):
+		response =self.client.post(reverse('swecourseapp:postnote'), { 'content':'test content', 'id':self.topic.id})
+		self.assertRedirects(response, '/login/?next=/ajax/postNote', fetch_redirect_response=False)
 
 
 
