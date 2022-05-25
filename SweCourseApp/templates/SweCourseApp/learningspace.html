@@ -20,8 +20,19 @@
 		</div>
 	  </div>
 	  <div class="col-1">
-		<a class="btn btn-warning" href="{% url 'swecourseapp:editlearningspace' learning_space.id %}">
-			<i class="fa fa-edit text-white">Edit</i></a>
+		
+			
+			{% if is_participant %}
+			<div class="row"><a class="btn btn-warning" href="{% url 'swecourseapp:editlearningspace' learning_space.id %}"><i class="fa fa-edit text-white">Edit</i></a></div>
+			<div class="row mt-4"><button type="button" id="leave-learningspace" data-id="{{learning_space.id}}" class="btn btn-danger">Leave</button></div>
+			{% else %}
+			<div class="row mt-4"><button type="button" id="join-learningspace" data-id="{{learning_space.id}}" class="btn btn-success">Join</button></div>
+			
+			{% endif %}
+
+			
+			
+			
 	  </div>
 	  <div class="col-2 d-flex flex-column justify-content-md-between align-items-center pt-2 hover01 sidebar ">
 		  <div class="p-2 img-container ">
@@ -45,4 +56,48 @@
 	  </div>
 	</div>
 </div>
+<script src={% static "js/jquery.min.js" %} ></script>
+<script>
+	$('#join-learningspace').click(function(){
+		var id = $(this).data("id");
+		console.log(id);
+			// make POST ajax call
+			$.ajax({
+				type: 'POST',
+				url: "{% url 'swecourseapp:joinlearningspace' %}",
+				data: {
+			'id': id,
+			'csrfmiddlewaretoken': '{{ csrf_token }}',},
+			dataType: 'json',
+				success: function (response) {
+					location.reload();
+				},
+				error: function (response) {
+					alert(response["responseJSON"]["error"]);
+				}
+			})
+    });     
+
+	$('#leave-learningspace').click(function(){
+		var id = $(this).data("id");
+		console.log(id);
+			// make POST ajax call
+			$.ajax({
+				type: 'POST',
+				url: "{% url 'swecourseapp:leavelearningspace' %}",
+				data: {
+			'id': id,
+			'csrfmiddlewaretoken': '{{ csrf_token }}',},
+			dataType: 'json',
+				success: function (response) {
+					location.reload();
+				},
+				error: function (response) {
+					alert(response["responseJSON"]["error"]);
+				}
+			})
+    });     
+
+
+</script>
 {% endblock %}

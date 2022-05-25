@@ -1,7 +1,7 @@
 from ast import keyword
 from django.http import HttpResponse, HttpResponseRedirect
 from matplotlib.style import context
-from .models import LearningSpace, Topic, Prerequisite, Resource, Comment, Notes, LikedResources
+from .models import LearningSpace, Topic, Prerequisite, Resource, Comment, Notes, LikedResources, LearningSpaceParticipation
 from. forms import CommentForm, LearningSpaceForm, TopicForm, ResourceForm, NoteForm
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
@@ -74,7 +74,8 @@ def create_learning_space(request, learning_space_id=None):
 
 def learning_space(request, learning_space_id):
     learning_space = get_object_or_404(LearningSpace, pk=learning_space_id)
-    context = {'learning_space': learning_space}
+    is_participant= LearningSpaceParticipation.objects.filter(learning_space_id = learning_space_id,user=request.user).exists()
+    context = {'learning_space': learning_space, 'is_participant':is_participant}
     return render(request, 'SweCourseApp/learningspace.html', context)
 
 @login_required
@@ -153,6 +154,7 @@ def topics(request, learning_space_id):
 @login_required
 def topic(request, topic_id, learning_space_id=None ):
     topic = Topic.objects.get(pk=topic_id)
+    is_participant= LearningSpaceParticipation.objects.filter(learning_space_id = learning_space_id,user=request.user).exists()
     resourceData = []
     resources = Resource.objects.filter(topic_id = topic_id)
     user_notes = Notes.objects.filter(topic_id = topic_id).filter(user_id = request.user.id)
@@ -166,7 +168,7 @@ def topic(request, topic_id, learning_space_id=None ):
             })
 
     resource_form = ResourceForm()
-    context = {'topic':topic, 'resource_form':resource_form, 'resource_data':resourceData, 'user_notes' : user_notes, 'other_notes':other_notes}
+    context = {'topic':topic, 'resource_form':resource_form, 'resource_data':resourceData, 'user_notes' : user_notes, 'other_notes':other_notes, 'is_participant':is_participant}
     return render(request, 'SweCourseApp/topic.html', context)
 
 @login_required
@@ -226,4 +228,22 @@ def postNote(request):
             return JsonResponse({"data": json_instance}, status=200)
         else:
             return JsonResponse({"error": form.errors}, status=400)
+    return JsonResponse({"error": "Please try again later"}, status=400)
+
+@login_required
+def joinLearningSpace(request):
+    if  request.method == "POST":
+        learning_space_id =request.POST.get("id")
+        learning_space = LearningSpace.objects.get(pk=learning_space_id)
+        LearningSpaceParticipation.objects.create(learning_space = learning_space, user = request.user)
+        return JsonResponse({"data": 'Successfuly joined'}, status=200)
+    return JsonResponse({"error": "Please try again later"}, status=400)
+
+@login_required
+def leaveLearningSpace(request):
+    if  request.method == "POST":
+        learning_space_id =request.POST.get("id")
+        learning_space = LearningSpace.objects.get(pk=learning_space_id)
+        LearningSpaceParticipation.objects.filter(learning_space = learning_space, user = request.user).delete()
+        return JsonResponse({"data": 'Successfuly left'}, status=200)
     return JsonResponse({"error": "Please try again later"}, status=400)
