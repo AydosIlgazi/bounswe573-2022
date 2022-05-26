@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-o6x!h8+njr#r*hi$rvl#023dpz0f#-8w^ti04ztw*@3ds=zjg5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -82,13 +82,13 @@ WSGI_APPLICATION = 'Swe573.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'swedb',
-        'USER': 'root',
-        'HOST': '127.0.0.1',
-        'PORT': '3306'
+        'NAME': os.environ['DATABASE_NAME'],
+        'USER': os.environ['DATABASE_USER'],
+        'PASSWORD': os.environ['DATABASE_PASSWORD'],
+        'HOST': os.environ['DATABASE_HOST'],
+        'PORT': os.environ['DATABASE_PORT'],
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
