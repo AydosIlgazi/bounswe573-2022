@@ -8,7 +8,7 @@
 		{% csrf_token %}
 		{{form.media}}
 		<div class="vh-100">
-			<h1 class="h3 fw-normal text-center">Learning Space</h3>
+			<h1 class="h3 fw-normal text-center">Topic</h3>
 				<div class="mb-4">
 					<label for="form-label"> {{ form.title.label_tag }}</label>
 					{% render_field form.title class="form-control" %}
