@@ -74,7 +74,9 @@ def create_learning_space(request, learning_space_id=None):
 
 def learning_space(request, learning_space_id):
     learning_space = get_object_or_404(LearningSpace, pk=learning_space_id)
-    is_participant= LearningSpaceParticipation.objects.filter(learning_space_id = learning_space_id,user=request.user).exists()
+    is_participant = False
+    if request.user.is_authenticated:
+        is_participant= LearningSpaceParticipation.objects.filter(learning_space_id = learning_space_id,user=request.user).exists()
     context = {'learning_space': learning_space, 'is_participant':is_participant}
     return render(request, 'SweCourseApp/learningspace.html', context)
 
@@ -207,6 +209,7 @@ def likeResource(request):
         resource = Resource.objects.get(pk=resource_id)
         LikedResources.objects.create(resource = resource, user = request.user)
         return JsonResponse({"likes": resource.likes}, status =200)
+    return JsonResponse({"error": "Please try again later"}, status=400)
 
 @login_required
 def postComment(request):
