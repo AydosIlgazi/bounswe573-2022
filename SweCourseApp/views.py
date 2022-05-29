@@ -204,7 +204,7 @@ def likeResource(request):
         resource_id =request.POST.get("id")
         liked_resource= LikedResources.objects.filter(resource = resource_id,user=request.user).exists()
         if liked_resource:
-            return JsonResponse({"error": "You have already liked this resource" + str(resource_id)}, status =500)
+            return JsonResponse({"error": "You have already liked this resource"}, status =500)
         Resource.objects.filter(pk=resource_id).update(likes=F('likes') + 1)
         resource = Resource.objects.get(pk=resource_id)
         LikedResources.objects.create(resource = resource, user = request.user)
