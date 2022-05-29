@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.core import serializers
@@ -58,6 +58,10 @@ def loginView(request):
     else:
         form = AuthenticationForm()
     return render(request, 'SweCourseApp/login.html', {'form': form})
+
+def logoutView(request):
+    logout(request)
+    return HttpResponseRedirect('/login')
 
 @login_required
 def create_learning_space(request, learning_space_id=None):

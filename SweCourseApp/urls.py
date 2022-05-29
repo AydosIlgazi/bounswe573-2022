@@ -10,6 +10,7 @@ urlpatterns = [
     path('index/', views.index, name='index'),
     path('signup/', views.signup, name='signup'),
     path('login/',views.loginView, name='login'),
+    path('logout/',views.logoutView, name='logout'),
     path('createlearningspace/',views.create_learning_space, name='createlearningspace'),
     path('editlearningspace/<int:learning_space_id>', views.create_learning_space, name='editlearningspace'),
     path('learningspace/<int:learning_space_id>',views.learning_space, name='learningspace'),
